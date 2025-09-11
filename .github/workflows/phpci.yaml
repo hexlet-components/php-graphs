@@ -20,7 +20,7 @@ jobs:
         php-version: '8.4'
 
     - name: Setup project
-      run: make setup
+      run: make install
 
     - name: Check lint
       run: make lint
