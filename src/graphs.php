@@ -29,7 +29,7 @@ use Tightenco\Collect\Support\Collection;
  * //   'E' => ['C'],
  * // ]
  */
-function makeJoints(array $tree)
+function makeJoints(array $tree): array
 {
     $iter = function ($tree, $acc, $parent) use (&$iter) {
         $leaf = $tree[0];
@@ -80,7 +80,7 @@ function makeJoints(array $tree)
  * //     ]],
  * // ]];
  */
-function buildTreeFromLeaf(array $joints, string $leaf)
+function buildTreeFromLeaf(array $joints, string $leaf): array
 {
     $iter = function ($current, $acc) use (&$iter, $joints) {
 
@@ -128,7 +128,7 @@ function buildTreeFromLeaf(array $joints, string $leaf)
  * //     E: ['C'],
  * // ]
  */
-function sortJoints(array $joints)
+function sortJoints(array $joints): array
 {
     $sortedJoints = [];
     foreach ($joints as $node => $neighbors) {
@@ -169,7 +169,7 @@ function sortJoints(array $joints)
  * //     ]],
  * // ]];
  */
-function map(callable $func, array $tree)
+function map(callable $func, array $tree): array
 {
     $children = $tree[1] ?? null;
     $updatedName = $func($tree);
@@ -221,7 +221,7 @@ function map(callable $func, array $tree)
  * //     E6, 'E',
  * // ]
  */
-function makeAssociations(array $uniqueTree, array $tree)
+function makeAssociations(array $uniqueTree, array $tree): array
 {
     $uniqueLeafs = collect($uniqueTree)->flatten();
     $leafs = collect($tree)->flatten();
@@ -270,7 +270,7 @@ function makeAssociations(array $uniqueTree, array $tree)
  * //     ['D'],
  * // ]];
  */
-function sortTree(array $tree)
+function sortTree(array $tree): array
 {
     $uniqueTree = map(fn($node) => uniqid($node[0]), $tree);
     $associations = makeAssociations($uniqueTree, $tree);

@@ -12,7 +12,7 @@ use function Php\Graphs\graphs\sortTree;
 
 class GraphsTest extends TestCase
 {
-    public function testMakeJoints()
+    public function testMakeJoints(): void
     {
         $tree = ['A', [
             ['C', [
@@ -39,28 +39,28 @@ class GraphsTest extends TestCase
         ]];
 
         $expected = [
-          'A' => ['C', 'B', null],
-          'C' => ['F', 'G', 'A'],
-          'F' => ['J', 'I', 'C'],
-          'J' => ['O', 'N', 'F'],
-          'O' => ['J'],
-          'N' => ['J'],
-          'I' => ['M', 'F'],
-          'M' => ['I'],
-          'G' => ['K', 'L', 'C'],
-          'K' => ['G'],
-          'L' => ['G'],
-          'B' => ['E', 'D', 'A'],
-          'E' => ['B'],
-          'D' => ['H', 'B'],
-          'H' => ['D']
+            'A' => ['C', 'B', null],
+            'C' => ['F', 'G', 'A'],
+            'F' => ['J', 'I', 'C'],
+            'J' => ['O', 'N', 'F'],
+            'O' => ['J'],
+            'N' => ['J'],
+            'I' => ['M', 'F'],
+            'M' => ['I'],
+            'G' => ['K', 'L', 'C'],
+            'K' => ['G'],
+            'L' => ['G'],
+            'B' => ['E', 'D', 'A'],
+            'E' => ['B'],
+            'D' => ['H', 'B'],
+            'H' => ['D']
         ];
 
         $actual = makeJoints($tree);
         $this->assertEquals($expected, $actual);
     }
 
-    public function testBuildTreeFromLeaf()
+    public function testBuildTreeFromLeaf(): void
     {
         $joints = [
             'B' => ['D', 'A'],
@@ -86,7 +86,7 @@ class GraphsTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSortJoints()
+    public function testSortJoints(): void
     {
         $joints = [
             'B' => ['D', 'A'],
@@ -111,7 +111,7 @@ class GraphsTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testMap()
+    public function testMap(): void
     {
         $tree = ['A', [
             ['C', [
@@ -169,7 +169,7 @@ class GraphsTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testSortTree()
+    public function testSortTree(): void
     {
         $tree = ['B', [
             ['D'],
