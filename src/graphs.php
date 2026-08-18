@@ -2,8 +2,6 @@
 
 namespace Php\Graphs\graphs;
 
-use Tightenco\Collect\Support\Collection;
-
 /**
  * Make joints from tree
  * @param array $tree
