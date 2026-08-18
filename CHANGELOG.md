@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/hexlet-components/php-graphs/compare/v2.0.0...v2.0.1) (2026-08-18)
+
+
+### Bug Fixes
+
+* **graphs:** убрать импорт пакета, которого нет в зависимостях ([#8](https://github.com/hexlet-components/php-graphs/issues/8)) ([2b6e82a](https://github.com/hexlet-components/php-graphs/commit/2b6e82a7b01d8b02042d8a0f74a39b2e0f382b7d))
+
 ## [2.0.0](https://github.com/hexlet-components/php-graphs/compare/v1.1.0...v2.0.0) (2026-08-18)
 
 
