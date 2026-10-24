@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Php\Graphs\graphs;
 
 /**
@@ -44,12 +46,16 @@ function makeJoints(array $tree): array
 
         $newAcc = array_merge($acc, [$leaf => array_values($neighbors)]);
 
-        return array_reduce($children, function ($iAcc, $n) use (&$iter, $leaf) {
-            return $iter($n, $iAcc, $leaf);
-        }, $newAcc);
+        return array_reduce(
+            $children,
+            function ($iAcc, $n) use (&$iter, $leaf) {
+                return $iter($n, $iAcc, $leaf);
+            },
+            $newAcc,
+        );
     };
 
-    return $iter($tree, [], '');
+    return $iter($tree, [], parent: '');
 }
 
 /**
@@ -81,26 +87,18 @@ function makeJoints(array $tree): array
 function buildTreeFromLeaf(array $joints, string $leaf): array
 {
     $iter = function ($current, $acc) use (&$iter, $joints) {
-
         $checked = [...$acc, $current];
         $neighbors = $joints[$current] ?? [];
-        $filtered = array_filter($neighbors, function ($n) use ($checked) {
-            return !in_array($n, $checked) && $n !== "";
-        });
+        $filtered = array_filter($neighbors, fn($n) => !in_array($n, $checked, strict: true) && $n !== '');
         $mapped = array_map(function ($n) use (&$iter, $checked) {
             return $iter($n, $checked);
         }, array_values($filtered));
 
-        $result = empty($mapped) ? [$current] : [$current, $mapped];
-
-        return $result;
+        return $mapped === [] ? [$current] : [$current, $mapped];
     };
 
-    $tree = $iter($leaf, []);
-
-    return $tree;
+    return $iter($leaf, []);
 }
-
 
 /**
  * Sort joints
@@ -221,23 +219,23 @@ function map(callable $func, array $tree): array
  */
 function makeAssociations(array $uniqueTree, array $tree): array
 {
-    $uniqueLeafs = collect($uniqueTree)->flatten();
-    $leafs = collect($tree)->flatten();
+    $uniqueLeaves = collect($uniqueTree)->flatten();
+    $leaves = collect($tree)->flatten();
 
     $result = (object) [];
     $index = -1;
-    $length = count($uniqueLeafs);
+    $length = count($uniqueLeaves);
 
     while (++$index < $length) {
-        $leaf = $leafs[$index] ?? null;
-        $result->{$uniqueLeafs[$index]} = $leaf;
+        $leaf = $leaves[$index] ?? null;
+        $result->{$uniqueLeaves[$index]} = $leaf;
     }
 
     return (array) $result;
 }
 
 /**
- * Sorts leafs in a tree (does not change its structure)
+ * Sorts leaves in a tree (does not change its structure)
  * @param array $tree
  * @return array
  * @example

@@ -1,42 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Php\Graphs\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Php\Graphs\graphs\makeJoints;
 use function Php\Graphs\graphs\buildTreeFromLeaf;
-use function Php\Graphs\graphs\sortJoints;
+use function Php\Graphs\graphs\makeJoints;
 use function Php\Graphs\graphs\map;
+use function Php\Graphs\graphs\sortJoints;
 use function Php\Graphs\graphs\sortTree;
 
 class GraphsTest extends TestCase
 {
     public function testMakeJoints(): void
     {
-        $tree = ['A', [
-            ['C', [
-                ['F', [
-                    ['J', [
-                        ['O'],
-                        ['N'],
-                    ]],
-                    ['I', [
-                        ['M'],
-                    ]],
-                ]],
-                ['G', [
-                    ['K'],
-                    ['L'],
-                ]],
-            ]],
-            ['B', [
-                ['E'],
-                ['D', [
-                    ['H'],
-                ]],
-            ]],
-        ]];
+        $tree = [
+            'A',
+            [
+                [
+                    'C',
+                    [
+                        [
+                            'F',
+                            [
+                                [
+                                    'J',
+                                    [
+                                        ['O'],
+                                        ['N'],
+                                    ],
+                                ],
+                                [
+                                    'I',
+                                    [
+                                        ['M'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'G',
+                            [
+                                ['K'],
+                                ['L'],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'B',
+                    [
+                        ['E'],
+                        [
+                            'D',
+                            [
+                                ['H'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $expected = [
             'A' => ['C', 'B', null],
@@ -53,7 +79,7 @@ class GraphsTest extends TestCase
             'B' => ['E', 'D', 'A'],
             'E' => ['B'],
             'D' => ['H', 'B'],
-            'H' => ['D']
+            'H' => ['D'],
         ];
 
         $actual = makeJoints($tree);
@@ -71,18 +97,26 @@ class GraphsTest extends TestCase
             'E' => ['C'],
         ];
 
-        $expected = ['C', [
-            ['F'],
-            ['E'],
-            ['A', [
-                ['B', [
-                    ['D']
-                ]],
-            ]],
-        ]];
+        $expected = [
+            'C',
+            [
+                ['F'],
+                ['E'],
+                [
+                    'A',
+                    [
+                        [
+                            'B',
+                            [
+                                ['D'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-
-        $actual = buildTreeFromLeaf($joints, 'C');
+        $actual = buildTreeFromLeaf($joints, leaf: 'C');
         $this->assertEquals($expected, $actual);
     }
 
@@ -113,55 +147,103 @@ class GraphsTest extends TestCase
 
     public function testMap(): void
     {
-        $tree = ['A', [
-            ['C', [
-                ['F', [
-                    ['J', [
-                        ['O'],
-                        ['N'],
-                    ]],
-                    ['I', [
-                        ['M'],
-                    ]],
-                ]],
-                ['G', [
-                    ['K'],
-                    ['L'],
-                ]],
-            ]],
-            ['B', [
-                ['E'],
-                ['D', [
-                    ['H'],
-                ]],
-            ]],
-        ]];
+        $tree = [
+            'A',
+            [
+                [
+                    'C',
+                    [
+                        [
+                            'F',
+                            [
+                                [
+                                    'J',
+                                    [
+                                        ['O'],
+                                        ['N'],
+                                    ],
+                                ],
+                                [
+                                    'I',
+                                    [
+                                        ['M'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'G',
+                            [
+                                ['K'],
+                                ['L'],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'B',
+                    [
+                        ['E'],
+                        [
+                            'D',
+                            [
+                                ['H'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-        $expected = ['a', [
-            ['c', [
-                ['f', [
-                    ['j', [
-                        ['o'],
-                        ['n'],
-                    ]],
-                    ['i', [
-                        ['m'],
-                    ]],
-                ]],
-                ['g', [
-                    ['k'],
-                    ['l'],
-                ]],
-            ]],
-            ['b', [
-                ['e'],
-                ['d', [
-                    ['h'],
-                ]],
-            ]],
-        ]];
+        $expected = [
+            'a',
+            [
+                [
+                    'c',
+                    [
+                        [
+                            'f',
+                            [
+                                [
+                                    'j',
+                                    [
+                                        ['o'],
+                                        ['n'],
+                                    ],
+                                ],
+                                [
+                                    'i',
+                                    [
+                                        ['m'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'g',
+                            [
+                                ['k'],
+                                ['l'],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'b',
+                    [
+                        ['e'],
+                        [
+                            'd',
+                            [
+                                ['h'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-        $actual = map(function ($node) {
+        $actual = map(static function ($node) {
             [$name] = $node;
             return strtolower($name);
         }, $tree);
@@ -171,31 +253,55 @@ class GraphsTest extends TestCase
 
     public function testSortTree(): void
     {
-        $tree = ['B', [
-            ['D'],
-            ['A', [
-                ['C', [
-                    ['F'],
-                    ['E'],
-                ]],
-                ['B', [
-                    ['D'],
-                ]],
-            ]],
-        ]];
+        $tree = [
+            'B',
+            [
+                ['D'],
+                [
+                    'A',
+                    [
+                        [
+                            'C',
+                            [
+                                ['F'],
+                                ['E'],
+                            ],
+                        ],
+                        [
+                            'B',
+                            [
+                                ['D'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-        $expected = ['B', [
-            ['A', [
-                ['B', [
-                    ['D'],
-                ]],
-                ['C', [
-                    ['E'],
-                    ['F'],
-                ]],
-            ]],
-            ['D'],
-        ]];
+        $expected = [
+            'B',
+            [
+                [
+                    'A',
+                    [
+                        [
+                            'B',
+                            [
+                                ['D'],
+                            ],
+                        ],
+                        [
+                            'C',
+                            [
+                                ['E'],
+                                ['F'],
+                            ],
+                        ],
+                    ],
+                ],
+                ['D'],
+            ],
+        ];
 
         $actual = sortTree($tree);
 
