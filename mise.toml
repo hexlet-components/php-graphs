@@ -1,0 +1,26 @@
+# Тулинг репозитория для хоста и CI (jdx/mise-action). PHP и composer ставятся
+# отдельно (shivammathur/setup-php в CI). Версии проверок не пиним: latest.
+[tools]
+node = "26"
+hk = "2"
+pkl = "latest"
+mago = "latest"
+typos = "latest"
+rumdl = "latest"
+lychee = "latest"
+jactionlint = "latest"
+betterleaks = "latest"
+"npm:@commitlint/cli" = "latest"
+"npm:@commitlint/config-conventional" = "latest"
+
+[tasks.setup]
+description = "Поставить зависимости и git-хуки"
+run = ["composer install", "hk install"]
+
+[tasks.check]
+description = "Все проверки, тот же набор, что гоняет CI"
+run = "hk check --all"
+
+[tasks.fix]
+description = "Применить автоисправления"
+run = "hk fix --all"
